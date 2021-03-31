@@ -13,6 +13,8 @@ class ArtifactsController < ApplicationController
   # GET /artifacts/new
   def new
     @artifact = Artifact.new
+    @artifact.project_id = params[:project_id]
+    byebug
   end
 
   # GET /artifacts/1/edit
@@ -25,7 +27,8 @@ class ArtifactsController < ApplicationController
 
     respond_to do |format|
       if @artifact.save
-        format.html { redirect_to @artifact, notice: "Artifact was successfully created." }
+        format.html { redirect_to tenant_project_url(tenant_id: Tenant.current_tenant_id,
+                id: @artifact.project_id), notice: "Artifact was successfully created." }
         format.json { render :show, status: :created, location: @artifact }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -51,7 +54,8 @@ class ArtifactsController < ApplicationController
   def destroy
     @artifact.destroy
     respond_to do |format|
-      format.html { redirect_to artifacts_url, notice: "Artifact was successfully destroyed." }
+      format.html { redirect_to tenant_project_url(tenant_id: Tenant.current_tenant_id,
+        id: @artifact.project_id), notice: "Artifact was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -64,6 +68,6 @@ class ArtifactsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def artifact_params
-      params.require(:artifact).permit(:name, :key, :project_id)
+      params.require(:artifact).permit(:name, :project_id, :upload)
     end
 end
