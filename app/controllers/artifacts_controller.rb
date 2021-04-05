@@ -14,7 +14,6 @@ class ArtifactsController < ApplicationController
   def new
     @artifact = Artifact.new
     @artifact.project_id = params[:project_id]
-    byebug
   end
 
   # GET /artifacts/1/edit
